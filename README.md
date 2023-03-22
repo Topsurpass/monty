@@ -1,8 +1,8 @@
-https://intranet.alxswe.com/projects/249#:~:text=set%20of%20tests-,The%20Monty%20language,-Monty%200.98%20is
+THE MONTY LANGUAGE
 
 Monty 0.98 is a scripting language that is first compiled into Monty byte codes (Just like Python). It relies on a unique stack, with specific instructions to manipulate it. The goal of this project is to create an interpreter for Monty ByteCodes files.
 
-https://intranet.alxswe.com/projects/249#:~:text=Requirements,General
+REQUIREMENTS:
 
 Allowed editors: vi, vim, emacs
 All your files will be compiled on Ubuntu 20.04 LTS using gcc, using the options -Wall -Werror -Wextra -pedantic -std=c89
@@ -40,7 +40,7 @@ pall
 2
 1
 
-https://intranet.alxswe.com/projects/249#:~:text=int%20line_number)%3B%0A%7D%20instruction_t%3B-,Compilation,-%26%20Output
+COMPILATIONS AND OUTPUTS:
 
 Your code will be compiled this way:
 
