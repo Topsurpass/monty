@@ -74,7 +74,7 @@ void pint_stack(stack_t **head, unsigned int line_number)
  */
 void pop_stack(stack_t **head, unsigned int line_number)
 {
-	stack_t *del;
+	stack_t *del = NULL;
 
 	/* if no doubly linked list or if the doubly linked list is empty */
 	if (head == NULL || *head == NULL)
@@ -83,17 +83,20 @@ void pop_stack(stack_t **head, unsigned int line_number)
 		exit(EXIT_FAILURE);
 	}
 	/* if there's just one node in the doubly linked list */
-	del = *head;
-	if ((*head)->next == NULL)
-	{
-		*head = NULL;
-		free(del);
-	}
 	else
 	{
-		*head = (*head)->next;
-		(*head)->prev = NULL;
-		free(del);
+		del = *head;
+		if ((*head)->next == NULL)
+		{
+			*head = NULL;
+			free(del);
+		}
+		else
+		{
+			*head = (*head)->next;
+			(*head)->prev = NULL;
+			free(del);
+		}
 	}
 }
 /**
@@ -105,7 +108,7 @@ void pop_stack(stack_t **head, unsigned int line_number)
  */
 void swap(stack_t **head, unsigned int line_number)
 {
-	stack_t *holder;
+	stack_t *holder = NULL;
 
 	if (*head == NULL || (*head)->next == NULL)
 	{

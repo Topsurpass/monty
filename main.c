@@ -10,7 +10,7 @@
 
 int main(int argc, char **argv)
 {
-	int fd;
+	int fd, pushed = 0;
 	unsigned int line = 1;
 	ssize_t no_of_byte;
 	char *buffer, *token, *delim = "\n\t\a\r ;:";
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 		return (0);
 
 	no_of_byte = read(fd, buffer, 10000);
-	
+
 	if (no_of_byte == -1)
 	{
 		free(buffer);
@@ -44,10 +44,26 @@ int main(int argc, char **argv)
 	token = strtok(buffer, delim);
 	while (token != NULL)
 	{
-		if (strcmp(token, "push") == 0)
+		if (pushed == 1)
 		{
-			token = strtok(NULL, delim);
 			push_val(&head, line, token);
+			pushed = 0;
+			token = strtok(NULL, delim);
+			line++;
+			continue;
+		}
+		/**
+		 * if (strcmp(token, "push") == 0)
+		 * {
+		 *	token = strtok(NULL, delim);
+		 * 	push_val(&head, line, token);
+		 * }
+		 */
+		else if (strcmp(token, "push") == 0)
+		{
+			pushed = 1;
+			token = strtok(NULL, delim);
+			continue;
 		}
 		else
 		{
