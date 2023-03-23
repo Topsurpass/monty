@@ -1,86 +1,74 @@
 #include "monty.h"
 
 /**
- * main - the entrance to our program
- * @argc: argument counter
- * @argv: argument vector
- *
- * Return: 0 (end of our program)
+ * main - entry into interpreter
+ * @argc: argc counter
+ * @argv: arguments
+ * Return: 0 on success
  */
-
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
-	int fd, pushed = 0;
+	int fd, ispush = 0;
 	unsigned int line = 1;
-	ssize_t no_of_byte;
-	char *buffer, *token, *delim = "\n\t\a\r ;:";
-	stack_t *head = NULL;
-
+	ssize_t n_read;
+	char *buffer, *token;
+	stack_t *h = NULL;
 
 	if (argc != 2)
 	{
 		printf("USAGE: monty file\n");
 		exit(EXIT_FAILURE);
 	}
-
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 	{
-		printf("Error: Cant open file %s\n", argv[1]);
+		printf("Error: Can't open file %s\n", argv[1]);
 		exit(EXIT_FAILURE);
 	}
 	buffer = malloc(sizeof(char) * 10000);
-	if (buffer == NULL)
+	if (!buffer)
 		return (0);
-
-	no_of_byte = read(fd, buffer, 10000);
-
-	if (no_of_byte == -1)
+	n_read = read(fd, buffer, 10000);
+	if (n_read == -1)
 	{
 		free(buffer);
 		close(fd);
 		exit(EXIT_FAILURE);
 	}
-	token = strtok(buffer, delim);
+	token = strtok(buffer, "\n\t\a\r ;:");
 	while (token != NULL)
 	{
-		if (pushed == 1)
+		if (ispush == 1)
 		{
-			push_val(&head, line, token);
-			pushed = 0;
-			token = strtok(NULL, delim);
+			push(&h, line, token);
+			ispush = 0;
+			token = strtok(NULL, "\n\t\a\r ;:");
 			line++;
 			continue;
 		}
-		/**
-		 * if (strcmp(token, "push") == 0)
-		 * {
-		 *	token = strtok(NULL, delim);
-		 * 	push_val(&head, line, token);
-		 * }
-		 */
 		else if (strcmp(token, "push") == 0)
 		{
-			pushed = 1;
-			token = strtok(NULL, delim);
+			ispush = 1;
+			token = strtok(NULL, "\n\t\a\r ;:");
 			continue;
 		}
 		else
 		{
-			if (get_op_code_func(token) != NULL)
-				get_op_code_func(token)(&head, line);
+			if (get_op_func(token) != 0)
+			{
+				get_op_func(token)(&h, line);
+			}
 			else
 			{
-				free_list(&head);
+				free_dlist(&h);
 				printf("L%d: unknown instruction %s\n", line, token);
 				exit(EXIT_FAILURE);
 			}
 		}
 		line++;
-		token = strtok(NULL, delim);
+		token = strtok(NULL, "\n\t\a\r ;:");
 	}
-	free_list(&head);
-	free(buffer);
+	free_dlist(&h); free(buffer);
 	close(fd);
 	return (0);
 }
